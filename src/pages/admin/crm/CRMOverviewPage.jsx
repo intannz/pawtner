@@ -1,0 +1,1 @@
+export { CRMOverviewPage as default } from '../AdminPageViews';

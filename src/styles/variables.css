@@ -1,0 +1,26 @@
+:root {
+  /* Palet Warna Pawtner */
+  --color-dark-cocoa: #170d0a;
+  --color-muted-caramel: #9B7A48;
+  --color-warm-beige: #F6F1E9;
+  --color-sand-beige: #E5D6C3;
+  --color-warm-white: #FFFFFF;
+  --color-sage-green: #E4ECE3;
+  
+  /* Status Colors */
+  --color-warning: #FEF3C7;
+  --color-warning-text: #92400E;
+  --color-danger: #FEE2E2;
+  --color-danger-text: #991B1B;
+
+  /* Font & Radius (Sudut Membulat) */
+  --font-primary: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* Shadow */
+  --shadow-sm: 0 2px 8px rgba(50, 27, 22, 0.05);
+  --shadow-md: 0 4px 16px rgba(50, 27, 22, 0.08);
+}

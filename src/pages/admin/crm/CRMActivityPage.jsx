@@ -1,0 +1,1 @@
+export { CRMActivityPage as default } from '../AdminPageViews';
