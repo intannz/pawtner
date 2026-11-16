@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiArrowRight, FiLock, FiMail, FiShield } from 'react-icons/fi';
+import { FiLock, FiMail, FiShield } from 'react-icons/fi';
 import { useAuth } from '../../hooks/useAuth';
 
 const AdminLoginPage = () => {
@@ -17,7 +17,7 @@ const AdminLoginPage = () => {
     }
     navigate('/admin/dashboard', { replace: true });
   };
-  return <div className="auth-page"><span className="auth-role-icon"><FiShield /></span><p className="eyebrow">PAWTNER ADMIN</p><h1>Masuk ke panel bisnis</h1><p className="auth-description">Gunakan akun admin atau staf yang telah dibuat oleh pemilik bisnis.</p><form className="auth-form" onSubmit={submit}><label>Email<div className="auth-input"><FiMail /><input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@pawtner.com" /></div></label><label>Password<div className="auth-input"><FiLock /><input type="password" required placeholder="Masukkan password" /></div></label>{error && <p className="form-error">{error}</p>}<button className="button-primary auth-submit" type="submit">Masuk ke dashboard <FiArrowRight /></button></form><div className="auth-demo-info"><strong>Akun admin demo</strong><span>admin@pawtner.com</span><span>Password hanya simulasi untuk demo.</span></div><p className="auth-admin-link"><Link to="/login">Kembali ke login pelanggan</Link></p></div>;
+  return <div className="auth-page"><span className="auth-role-icon"><FiShield /></span><p className="eyebrow">PAWTNER ADMIN</p><h1>Masuk ke panel bisnis</h1><p className="auth-description">Gunakan akun admin yang telah dibuat oleh pemilik bisnis.</p><form className="auth-form" onSubmit={submit}><label>Email<div className="auth-input"><FiMail /><input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@pawtner.com" /></div></label><label>Password<div className="auth-input"><FiLock /><input type="password" required minLength="8" placeholder="Minimal 8 karakter" /></div></label>{error && <p className="form-error">{error}</p>}<button className="button-primary auth-submit" type="submit">Masuk ke dashboard</button></form><div className="auth-demo-info"><strong>Akun admin demo</strong><span>admin@pawtner.com</span><span>Password hanya simulasi untuk demo. Minimal 8 karakter.</span></div><p className="auth-admin-link"><Link to="/login">Kembali ke login pelanggan</Link></p></div>;
 };
 
 export default AdminLoginPage;

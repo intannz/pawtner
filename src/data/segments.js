@@ -5,7 +5,7 @@ const completedBookings = bookings.filter((booking) => booking.status === 'Seles
 const now = new Date('2026-10-28T12:00:00');
 const daysAgo = (date, days) => (now - new Date(date)) / (1000 * 60 * 60 * 24) <= days;
 const visitsFor = (customerId) => completedBookings.filter((booking) => booking.customerId === customerId);
-const customers = users.filter((user) => user.role === 'customer');
+const customers = users.filter((user) => user.role === 'user' || user.role === 'customer');
 
 export const segments = [
   {

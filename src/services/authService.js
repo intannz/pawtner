@@ -17,7 +17,7 @@ export const authService = {
     const newUser = {
       id: `CUS-000${users.length + 1}`,
       ...userData,
-      role: 'customer',
+      role: 'user',
       joinedDate: new Date().toISOString().split('T')[0],
       points: 0
     };

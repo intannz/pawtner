@@ -52,11 +52,11 @@ const DashboardPage = () => {
               </div>
             ))}
           </div>
-          <Link className="inline-link" to="/admin/services">Kelola layanan <span>→</span></Link>
+          <Link className="inline-link" to="/admin/services">Kelola layanan</Link>
         </Panel>
       </div>
       <div className="dashboard-grid">
-        <Panel title="Jadwal hari ini" description="Contoh booking pada tanggal demo." action={<Link className="inline-link" to="/admin/bookings">Semua booking →</Link>}>
+        <Panel title="Jadwal hari ini" description="Contoh booking pada tanggal demo." action={<Link className="inline-link" to="/admin/bookings">Semua booking</Link>}>
           <div className="schedule-list">
             {bookingRecords.filter((booking) => booking.date.startsWith('2026-10-28')).map((booking) => (
               <Link className="schedule-row" to={`/admin/bookings/${booking.id}`} key={booking.id}>
@@ -73,7 +73,7 @@ const DashboardPage = () => {
             <div className="simple-list-row"><span className="activity-marker">RS</span><span><strong>Profil hewan diperbarui</strong><small>Raka Saputra · Luna</small></span><small>Kemarin</small></div>
             <div className="simple-list-row"><span className="activity-marker">SM</span><span><strong>Layanan ditandai selesai</strong><small>Sinta Maharani · Mochi</small></span><small>26 Okt</small></div>
           </div>
-          <Link className="inline-link" to="/admin/crm/activity">Lihat aktivitas <span>→</span></Link>
+          <Link className="inline-link" to="/admin/crm/activity">Lihat aktivitas</Link>
         </Panel>
       </div>
     </div>

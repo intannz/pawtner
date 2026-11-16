@@ -5,7 +5,7 @@ import { transactions } from './transactions';
 import { users } from './users';
 import { reminders } from './reminders';
 
-export const customers = users.filter((user) => user.role === 'customer');
+export const customers = users.filter((user) => user.role === 'user' || user.role === 'customer');
 
 export const bookingRecords = bookings.map((booking) => ({
   ...booking,
@@ -48,9 +48,9 @@ export const servicePerformance = services.map((service) => ({
 }));
 
 export const staff = [
-  { id: 'STF-001', name: 'Nadia Putri', role: 'Groomer', services: 'Grooming', status: 'Aktif' },
-  { id: 'STF-002', name: 'drh. Bima Ardi', role: 'Dokter Hewan', services: 'Klinik', status: 'Aktif' },
-  { id: 'STF-003', name: 'Rani Kusuma', role: 'Admin', services: 'Operasional', status: 'Aktif' },
+  { id: 'STF-001', name: 'Nadia Putri', phone: '081234567801', role: 'Groomer', services: 'Grooming', status: 'Aktif' },
+  { id: 'STF-002', name: 'drh. Bima Ardi', phone: '081234567802', role: 'Dokter Hewan', services: 'Klinik', status: 'Aktif' },
+  { id: 'STF-003', name: 'Rani Kusuma', phone: '081234567803', role: 'Admin', services: 'Operasional', status: 'Aktif' },
 ];
 
 export const activities = [

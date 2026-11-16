@@ -377,6 +377,32 @@
   border-radius: 15px;
 }
 
+.booking-price-summary {
+  display: grid;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid #eadfce;
+  border-radius: 12px;
+  background: #faf7f1;
+}
+
+.booking-price-summary p {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+}
+
+.booking-price-summary p:last-of-type {
+  padding-top: 8px;
+  border-top: 1px solid #eadfce;
+  font-weight: 700;
+}
+
+.booking-price-summary small {
+  color: #a34a3b;
+}
+
 .booking-date-box {
   display: flex;
   flex-direction: column;
@@ -529,6 +555,378 @@
   accent-color: #70522d;
 }
 
+.customer-site {
+  min-height: 100vh;
+  background: #faf8f4;
+}
+
+.customer-navbar {
+  position: sticky;
+  z-index: 40;
+  top: 0;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid #eee8e0;
+  backdrop-filter: blur(12px);
+}
+
+.customer-navbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  width: min(1280px, calc(100% - 48px));
+  min-height: 76px;
+  margin: 0 auto;
+}
+
+.customer-brand img {
+  display: block;
+  width: auto;
+  height: 62px;
+}
+
+.customer-nav-links,
+.customer-nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.customer-nav-links {
+  flex: 1;
+  gap: 23px;
+}
+
+.customer-nav-links a {
+  color: #675a50;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.customer-nav-links a.active,
+.customer-nav-links a:hover {
+  color: #9b7a48;
+}
+
+.customer-nav-actions {
+  gap: 13px;
+}
+
+.customer-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  height: 39px;
+  color: #705f51;
+  background: #f8f5f0;
+  border-radius: 12px;
+}
+
+.customer-bell-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 4px;
+  color: #fff;
+  background: #b95d4c;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.customer-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #66594f;
+  padding: 4px 8px;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.customer-profile-menu {
+  position: relative;
+}
+
+.customer-profile-popover {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 10px);
+  right: 0;
+  display: grid;
+  min-width: 150px;
+  gap: 3px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #eee8e0;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(50, 27, 22, 0.12);
+}
+
+.customer-profile-popover a,
+.customer-profile-popover button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 10px;
+  color: #574c45;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.customer-profile-popover a:hover,
+.customer-profile-popover button:hover {
+  background: #faf8f4;
+}
+
+.customer-user-avatar {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  color: white;
+  background: #9b7a48;
+  border-radius: 50%;
+}
+
+.customer-main {
+  min-height: calc(100vh - 76px);
+  padding: 35px 24px 60px;
+}
+
+.customer-main > .page-shell {
+  max-width: 1160px;
+}
+
+.customer-welcome-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 220px;
+  padding: 34px 40px;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(115deg, #432a22, #80613d);
+  border-radius: 22px;
+}
+
+.customer-welcome-card > div {
+  max-width: 640px;
+}
+
+.customer-welcome-card .eyebrow {
+  color: #e8cfaa;
+}
+
+.customer-welcome-card h2 {
+  max-width: 560px;
+  font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.customer-welcome-card p:not(.eyebrow) {
+  margin: 11px 0 18px;
+  color: #f2e7d8;
+}
+
+.customer-welcome-icon {
+  padding-right: 22px;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.customer-welcome-icon svg {
+  width: 92px;
+  height: 92px;
+}
+
+.customer-service-price {
+  color: #80643d;
+  font-size: 1.25rem;
+}
+
+.customer-catalog-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 560px;
+  min-height: 46px;
+  padding: 0 14px;
+  color: #8c8077;
+  background: #fff;
+  border: 1px solid #e9e1d8;
+  border-radius: 12px;
+}
+
+.customer-catalog-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+
+.customer-page .service-card-content {
+  gap: 12px;
+}
+
+.service-category-tag,
+.voucher-label {
+  color: #9b7a48;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.points-summary {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  background: #f3e8d9;
+  border: 1px solid #e9dece;
+  border-radius: 17px;
+}
+
+.points-summary-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  color: #80643d;
+  background: #fff;
+  border-radius: 16px;
+  font-size: 1.45rem;
+}
+
+.points-summary small,
+.points-summary strong {
+  display: block;
+}
+
+.points-summary small {
+  color: #80643d;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.points-summary strong {
+  margin: 2px 0;
+  color: #432a22;
+  font-size: 1.6rem;
+}
+
+.points-summary p {
+  color: #736459;
+  font-size: 0.8rem;
+}
+
+.reward-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 16px;
+  background: #fcfaf7;
+  border: 1px solid #eee6dc;
+  border-radius: 14px;
+}
+
+.reward-card > span {
+  color: #80643d;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.reward-card > strong {
+  flex: 1;
+  font-size: 0.94rem;
+}
+
+.reward-card .button-primary {
+  width: 100%;
+  padding: 9px 10px;
+  font-size: 0.76rem;
+}
+
+.reward-card button:disabled,
+.customer-voucher-card button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.customer-voucher-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.customer-voucher-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px;
+  background: #fcfaf7;
+  border: 1px dashed #cbb89c;
+  border-radius: 14px;
+}
+
+.customer-voucher-card > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.voucher-code {
+  color: #432a22;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+}
+
+.customer-voucher-card p,
+.customer-voucher-card small {
+  color: #82766e;
+  font-size: 0.76rem;
+}
+
+.voucher-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.booking-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cancel-booking {
+  color: #a9524b;
+}
+
+.notification-list article.notification-read {
+  opacity: 0.68;
+}
+
 @media (max-width: 950px) {
   .sidebar {
     width: 210px;
@@ -545,9 +943,90 @@
   .customer-pet-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .customer-navbar-inner {
+    gap: 18px;
+    width: calc(100% - 32px);
+  }
+
+  .customer-nav-links {
+    gap: 13px;
+  }
 }
 
 @media (max-width: 700px) {
+  .customer-navbar-inner {
+    flex-wrap: wrap;
+    gap: 0 10px;
+    min-height: 0;
+    padding: 8px 0;
+  }
+
+  .customer-brand img {
+    height: 49px;
+  }
+
+  .customer-nav-links {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0 2px;
+    overflow-x: auto;
+  }
+
+  .customer-nav-links a {
+    font-size: 0.73rem;
+    white-space: nowrap;
+  }
+
+  .customer-nav-actions {
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .customer-user-chip > span:last-child {
+    display: none;
+  }
+
+  .customer-main {
+    min-height: calc(100vh - 110px);
+    padding: 22px 13px 36px;
+  }
+
+  .customer-welcome-card {
+    min-height: 190px;
+    padding: 23px;
+  }
+
+  .customer-welcome-icon {
+    padding: 0;
+  }
+
+  .customer-welcome-icon svg {
+    width: 54px;
+    height: 54px;
+  }
+
+  .reward-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .customer-voucher-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .voucher-actions {
+    flex-wrap: wrap;
+  }
+
+  .booking-card-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 68px;
+  }
+
   .sidebar {
     position: fixed;
     inset: auto 0 0;

@@ -142,10 +142,135 @@
   border-radius: 50%;
 }
 
+.admin-notification-link {
+  position: relative;
+}
+
+.admin-notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 4px;
+  color: #fff;
+  background: #b95d4c;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.admin-profile-menu {
+  position: relative;
+}
+
+.admin-profile-trigger {
+  padding: 0;
+  background: transparent;
+}
+
+.admin-profile-trigger .admin-profile {
+  gap: 9px;
+}
+
+.admin-profile-popover {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 10px);
+  right: 0;
+  display: grid;
+  min-width: 145px;
+  gap: 3px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #eee8e0;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(50, 27, 22, 0.12);
+}
+
+.admin-profile-popover a,
+.admin-profile-popover button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 10px;
+  color: #574c45;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.admin-profile-popover a:hover,
+.admin-profile-popover button:hover {
+  background: #faf8f4;
+}
+
+.admin-notification-list {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #eee8e0;
+  border-radius: 12px;
+}
+
+.admin-notification-item.unread {
+  background: #fbf7f0;
+}
+
+.admin-notification-item > span:last-child {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-notification-item small,
+.admin-notification-item time {
+  color: #83766c;
+  font-size: 0.78rem;
+}
+
+.admin-notification-dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  background: #b95d4c;
+  border-radius: 50%;
+}
+
 .admin-profile {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.customer-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.button-danger {
+  padding: 10px 14px;
+  color: #a9524b;
+  background: #fff4f1;
+  border: 1px solid #efd8d1;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.button-danger:hover {
+  background: #fce9e4;
 }
 
 .admin-info {
@@ -417,8 +542,124 @@
   resize: vertical;
 }
 
+.service-type-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #e8dfd3;
+  border-radius: 10px;
+}
+
+.service-type-options legend {
+  padding: 0 5px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.service-type-options label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  font-weight: 500;
+}
+
+.service-type-options input {
+  width: auto;
+  min-height: auto;
+}
+
+.staff-row-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 2px 0;
+  color: #796d64;
+  font-size: 0.82rem;
+}
+
+.table-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: #51463f;
+  background: #fff;
+  border: 1px solid #e7dfd6;
+  border-radius: 9px;
+}
+
+.table-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (max-width: 640px) {
+  .table-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 .form-success {
   margin: 0;
+}
+
+.loyalty-settings-form {
+  max-width: 720px;
+}
+
+.loyalty-reward-fields {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: #faf8f4;
+  border: 1px solid #eee8e0;
+  border-radius: 12px;
+}
+
+.loyalty-reward-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.booking-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.booking-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.booking-form label:last-of-type,
+.booking-form button,
+.booking-form .form-error,
+.booking-form-actions {
+  grid-column: 1 / -1;
+}
+
+.booking-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 @media (max-width: 900px) {
@@ -432,6 +673,10 @@
 
   .admin-header {
     padding: 0 20px;
+  }
+
+  .booking-form {
+    grid-template-columns: 1fr;
   }
 
   .admin-main {

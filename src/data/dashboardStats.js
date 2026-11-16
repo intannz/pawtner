@@ -7,7 +7,7 @@ const customerBookings = bookings.filter((booking) => booking.status === 'Selesa
   counts[booking.customerId] = (counts[booking.customerId] || 0) + 1;
   return counts;
 }, {});
-const totalCustomers = users.filter((user) => user.role === 'customer').length;
+const totalCustomers = users.filter((user) => user.role === 'user' || user.role === 'customer').length;
 const returningCustomers = Object.values(customerBookings).filter((count) => count > 1).length;
 const todayBookings = bookings.filter((booking) => booking.date.startsWith(demoDate));
 

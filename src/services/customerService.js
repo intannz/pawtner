@@ -6,7 +6,7 @@ const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
 export const customerService = {
   getAllCustomers: async () => {
     await delay();
-    return users.filter(user => user.role === 'customer');
+    return users.filter(user => user.role === 'user' || user.role === 'customer');
   },
 
   getCustomerById: async (customerId) => {

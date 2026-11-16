@@ -26,4 +26,12 @@ const additionalBookings = Array.from({ length: 27 }, (_, index) => {
   };
 });
 
-export const bookings = [...coreBookings, ...additionalBookings];
+export const dinaDemoBookings = [
+  { id: 'BK-031', customerId: 'CUS-0001', petId: 'PET-001', serviceId: 'SRV-002', date: '2026-10-19T09:00:00', status: 'Selesai' },
+  { id: 'BK-032', customerId: 'CUS-0001', petId: 'PET-001', serviceId: 'SRV-005', date: '2026-10-23T10:00:00', status: 'Selesai' },
+  { id: 'BK-033', customerId: 'CUS-0001', petId: 'PET-001', serviceId: 'SRV-001', date: '2026-10-31T13:00:00', status: 'Selesai' },
+  { id: 'BK-034', customerId: 'CUS-0001', petId: 'PET-001', serviceId: 'SRV-004', date: '2026-11-07T09:30:00', status: 'Selesai' },
+  { id: 'BK-035', customerId: 'CUS-0001', petId: 'PET-001', serviceId: 'SRV-006', date: '2026-11-14T11:00:00', status: 'Selesai' },
+];
+
+export const bookings = [...coreBookings, ...additionalBookings, ...dinaDemoBookings];

@@ -1,4 +1,4 @@
-import { FiArrowUpRight, FiInfo } from 'react-icons/fi';
+import { FiInfo } from 'react-icons/fi';
 
 export function PageHeading({ eyebrow, title, description, action }) {
   return (
@@ -68,7 +68,7 @@ export function StatusPill({ value }) {
 export function InlineLink({ children, ...props }) {
   return (
     <a className="inline-link" {...props}>
-      {children}<FiArrowUpRight aria-hidden="true" />
+      {children}
     </a>
   );
 }

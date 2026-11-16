@@ -31,6 +31,7 @@ import PetDetailPage from '../pages/customer/PetDetailPage';
 import BookingDetailPage from '../pages/customer/BookingDetailPage';
 import BookingFormPage from '../pages/customer/BookingFormPage';
 import NotificationsPage from '../pages/customer/NotificationsPage';
+import { CustomerServicesPage, CustomerServiceDetailPage, CustomerVouchersPage } from '../pages/customer/CustomerExtrasPage';
 
 // Admin Pages (Menggunakan alias untuk nama file yang serupa)
 import AdminDashboardPage from '../pages/admin/DashboardPage';
@@ -44,6 +45,8 @@ import CRMOverviewPage from '../pages/admin/crm/CRMOverviewPage';
 import SegmentsPage from '../pages/admin/crm/SegmentsPage';
 import FollowUpsPage from '../pages/admin/crm/FollowUpsPage';
 import LoyaltyPage from '../pages/admin/crm/LoyaltyPage';
+import CRMActivityPage from '../pages/admin/crm/CRMActivityPage';
+import { AdminNotificationsPage, AdminProfilePage } from '../pages/admin/AdminPageViews';
 import TransactionsPage from '../pages/admin/TransactionsPage';
 import ReportsPage from '../pages/admin/ReportsPage';
 import StaffPage from '../pages/admin/StaffPage';
@@ -71,9 +74,12 @@ export const AppRoutes = () => {
       </Route>
 
       {/* 3. CUSTOMER PORTAL ROUTES */}
-      <Route element={<ProtectedRoute allowedRoles={['customer']} />}>
+      <Route element={<ProtectedRoute allowedRoles={['user']} />}>
         <Route element={<CustomerLayout />}>
           <Route path="/account" element={<CustomerDashboardPage />} />
+          <Route path="/account/services" element={<CustomerServicesPage />} />
+          <Route path="/account/services/:slug" element={<CustomerServiceDetailPage />} />
+          <Route path="/account/vouchers" element={<CustomerVouchersPage />} />
           <Route path="/account/pets" element={<MyPetsPage />} />
           <Route path="/account/pets/:id" element={<PetDetailPage />} />
           <Route path="/account/bookings" element={<MyBookingsPage />} />
@@ -89,6 +95,8 @@ export const AppRoutes = () => {
       <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+          <Route path="/admin/notifications" element={<AdminNotificationsPage />} />
+          <Route path="/admin/profile" element={<AdminProfilePage />} />
           <Route path="/admin/bookings" element={<AdminBookingsPage />} />
           <Route path="/admin/bookings/:id" element={<AdminBookingDetailPage />} />
           <Route path="/admin/customers" element={<CustomersPage />} />
@@ -102,6 +110,7 @@ export const AppRoutes = () => {
           <Route path="/admin/crm/segments" element={<SegmentsPage />} />
           <Route path="/admin/crm/follow-ups" element={<FollowUpsPage />} />
           <Route path="/admin/crm/loyalty" element={<LoyaltyPage />} />
+          <Route path="/admin/crm/activity" element={<CRMActivityPage />} />
           
           <Route path="/admin/transactions" element={<TransactionsPage />} />
           <Route path="/admin/reports" element={<ReportsPage />} />

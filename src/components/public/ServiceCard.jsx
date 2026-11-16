@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiClock } from 'react-icons/fi';
+import { FiClock } from 'react-icons/fi';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 // Mengimpor variasi gambar layanan dari folder assets
@@ -34,7 +34,7 @@ const ServiceCard = ({ service }) => {
           <p>{service.description}</p>
         </div>
         <div className="service-card-meta"><span><FiClock /> {service.duration} menit</span><strong>{formatCurrency(service.price)}</strong></div>
-        <Link to={`/services/${service.id.toLowerCase()}`} className="button-secondary">Lihat detail <FiArrowRight /></Link>
+        <Link to={`/services/${service.id.toLowerCase()}`} className="button-secondary">Lihat detail</Link>
       </div>
     </article>
   );
