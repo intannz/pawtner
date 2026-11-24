@@ -12,6 +12,7 @@ export const storageKeys = {
   loyalty: 'pawtner_loyalty_settings',
   services: 'pawtner_services',
   staff: 'pawtner_staff',
+  transactions: 'pawtner_transactions',
 };
 
 export const initialServices = services;

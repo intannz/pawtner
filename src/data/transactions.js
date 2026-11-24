@@ -1,4 +1,4 @@
-import { bookings } from './bookings';
+import { bookings, dinaDemoBookings } from './bookings';
 import { services } from './services';
 
 const coreTransactions = [
@@ -20,4 +20,17 @@ const additionalTransactions = bookings.slice(3, 20).map((booking, index) => {
   };
 });
 
-export const transactions = [...coreTransactions, ...additionalTransactions];
+const dinaDemoTransactions = dinaDemoBookings.map((booking, index) => {
+  const service = services.find((item) => item.id === booking.serviceId);
+  return {
+    id: `TRX-${String(index + 21).padStart(3, '0')}`,
+    bookingId: booking.id,
+    customerId: booking.customerId,
+    totalAmount: service.price,
+    method: ['QRIS', 'Cash', 'Transfer Bank'][index % 3],
+    status: 'Lunas',
+    date: booking.date,
+  };
+});
+
+export const transactions = [...coreTransactions, ...additionalTransactions, ...dinaDemoTransactions];

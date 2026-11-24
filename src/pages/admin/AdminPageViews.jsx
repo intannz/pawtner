@@ -1,15 +1,15 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   FiActivity, FiCalendar, FiCheckCircle, FiChevronLeft, FiChevronRight, FiClock, FiDownload,
-  FiFilter, FiHeart, FiMail, FiMapPin, FiPlus, FiSearch,
-  FiSettings, FiShield, FiShoppingBag, FiTrendingUp, FiUsers
+  FiHeart, FiMail, FiMapPin, FiPlus, FiSearch,
+  FiSettings, FiShoppingBag, FiTrendingUp, FiUsers
 } from 'react-icons/fi';
 import {
   Bar, BarChart, CartesianGrid, ResponsiveContainer,
   Tooltip, XAxis, YAxis
 } from 'recharts';
-import { bookingRecords, customers, monthlyPerformance, servicePerformance, transactionRecords, vouchers } from '../../data/viewModels';
+import { customers, getMonthlyPerformance, getServicePerformance, vouchers } from '../../data/viewModels';
 import { reminders } from '../../data/reminders';
 import { users } from '../../data/users';
 import { bookings as initialBookings } from '../../data/bookings';
@@ -50,7 +50,6 @@ function SearchAndFilter({ search, setSearch, placeholder = 'Cari data...' }) {
         <FiSearch aria-hidden="true" />
         <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={placeholder} />
       </label>
-      <button className="button-secondary" type="button"><FiFilter /> Filter</button>
     </div>
   );
 }
@@ -75,10 +74,10 @@ function matchesBookingPeriod(value, period) {
   return dateDay >= weekStart && dateDay < nextWeekStart;
 }
 
-function downloadReportCsv() {
+function downloadReportCsv(bookingData) {
   const rows = [
     ['ID Booking', 'Pelanggan', 'Hewan', 'Layanan', 'Jadwal', 'Status'],
-    ...bookingRecords.map((booking) => [
+    ...bookingData.map((booking) => [
       booking.id,
       booking.customer?.name || '',
       booking.pet?.name || '',
@@ -239,7 +238,7 @@ export function CustomerDetailPage() {
   const [allPets] = useLocalStorage(storageKeys.pets, initialPets);
   const [allBookings] = useLocalStorage(storageKeys.bookings, initialBookings);
   const [allServices] = useLocalStorage(storageKeys.services, initialServices);
-  const [allTransactions] = useLocalStorage('pawtner_transactions', initialTransactions);
+  const [allTransactions] = useLocalStorage(storageKeys.transactions, initialTransactions);
   const customer = allUsers.find((item) => item.id === id && (item.role === 'user' || item.role === 'customer'));
   if (!customer) return <div className="page-shell"><PageHeading title="Pelanggan tidak ditemukan" /><Link to="/admin/customers" className="inline-link">Kembali ke pelanggan</Link></div>;
   const pets = allPets.filter((item) => item.ownerId === customer.id);
@@ -323,22 +322,60 @@ export function ServicesPage() {
 
 export function TransactionsPage() {
   const [search, setSearch] = useState('');
-  const rows = transactionRecords.filter((row) => searchText({ id: row.id, customer: row.customer?.name, method: row.method, status: row.status }, search));
+  const [statusFilter, setStatusFilter] = useState('Semua status');
+  const [methodFilter, setMethodFilter] = useState('Semua metode');
+  const [allTransactions] = useLocalStorage(storageKeys.transactions, initialTransactions);
+  const [allUsers] = useLocalStorage(storageKeys.users, users);
+  const [allBookings] = useLocalStorage(storageKeys.bookings, initialBookings);
+  const [allServices] = useLocalStorage(storageKeys.services, initialServices);
+  const rows = allTransactions.map((transaction) => {
+    const booking = allBookings.find((item) => item.id === transaction.bookingId);
+    return {
+      ...transaction,
+      customer: allUsers.find((item) => item.id === transaction.customerId),
+      booking,
+      service: allServices.find((item) => item.id === booking?.serviceId),
+    };
+  }).filter((row) => (
+    (statusFilter === 'Semua status' || row.status === statusFilter)
+    && (methodFilter === 'Semua metode' || row.method === methodFilter)
+    && searchText({
+      id: row.id,
+      customer: row.customer?.name,
+      email: row.customer?.email,
+      method: row.method,
+      status: row.status,
+      booking: row.bookingId,
+      service: row.service?.name,
+    }, search)
+  ));
+  const methods = [...new Set(allTransactions.map((transaction) => transaction.method).filter(Boolean))].sort();
+  const statuses = [...new Set(allTransactions.map((transaction) => transaction.status).filter(Boolean))].sort();
   const columns = [
     { header: 'No. transaksi', accessor: 'id' },
     { header: 'Pelanggan', render: (row) => row.customer?.name || '—' },
-    { header: 'Booking', accessor: 'bookingId' },
+    { header: 'Booking', render: (row) => <span><strong>{row.bookingId}</strong><small className="table-subline">{row.service?.name || 'Layanan tidak ditemukan'}</small></span> },
     { header: 'Tanggal', render: (row) => formatDate(row.date) },
     { header: 'Metode', accessor: 'method' },
     { header: 'Total', render: (row) => formatCurrency(row.totalAmount) },
     { header: 'Status', render: (row) => <StatusPill value={row.status} /> },
   ];
-  return <div className="page-shell"><PageHeading eyebrow="KEUANGAN" title="Transaksi" description="Pencatatan demo transaksi yang terhubung dengan booking." /><DemoNotice /><div className="summary-row"><StatTile icon={<FiShoppingBag />} label="Transaksi demo" value={rows.length} /><StatTile icon={<FiTrendingUp />} label="Nilai tercatat" value={formatCurrency(rows.reduce((total, row) => total + row.totalAmount, 0))} tone="sage" /><StatTile icon={<FiClock />} label="Belum dibayar" value={rows.filter((row) => row.status === 'Belum Dibayar').length} tone="sand" /></div><Panel title="Riwayat transaksi"><SearchAndFilter search={search} setSearch={setSearch} placeholder="Cari transaksi atau pelanggan..." /><DataTable columns={columns} data={rows} pageSize={10} /></Panel><p className="muted-copy">Pencatatan ini tidak terhubung ke payment gateway atau bank.</p></div>;
+  return <div className="page-shell"><PageHeading eyebrow="KEUANGAN" title="Transaksi" description="Pencatatan demo transaksi yang terhubung ke pelanggan, booking, dan layanan." /><DemoNotice /><div className="summary-row"><StatTile icon={<FiShoppingBag />} label="Transaksi ditampilkan" value={rows.length} /><StatTile icon={<FiTrendingUp />} label="Nilai tersaring" value={formatCurrency(rows.reduce((total, row) => total + Number(row.totalAmount || 0), 0))} tone="sage" /><StatTile icon={<FiClock />} label="Belum dibayar" value={rows.filter((row) => row.status === 'Belum Dibayar').length} tone="sand" /></div><Panel title="Riwayat transaksi"><div className="table-toolbar"><label className="page-search"><FiSearch aria-hidden="true" /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari transaksi, pelanggan, booking, atau layanan..." /></label><select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} aria-label="Filter status transaksi"><option>Semua status</option>{statuses.map((status) => <option key={status}>{status}</option>)}</select><select value={methodFilter} onChange={(event) => setMethodFilter(event.target.value)} aria-label="Filter metode pembayaran"><option>Semua metode</option>{methods.map((method) => <option key={method}>{method}</option>)}</select></div><DataTable columns={columns} data={rows} pageSize={10} /></Panel><p className="muted-copy">Pencatatan ini tidak terhubung ke payment gateway atau bank.</p></div>;
 }
 
 export function ReportsPage() {
-  const categories = useMemo(() => servicePerformance, []);
-  return <div className="page-shell"><PageHeading eyebrow="ANALITIK" title="Laporan" description="Ringkasan performa dari data booking dan transaksi demo." action={<button className="button-secondary" type="button" onClick={downloadReportCsv}><FiDownload /> Ekspor CSV</button>} /><DemoNotice /><div className="summary-row"><StatTile icon={<FiCalendar />} label="Booking pada data demo" value={bookingRecords.length} /><StatTile icon={<FiTrendingUp />} label="Nilai transaksi lunas" value={formatCurrency(transactionRecords.filter((item) => item.status === 'Lunas').reduce((sum, item) => sum + item.totalAmount, 0))} tone="sage" /><StatTile icon={<FiUsers />} label="Pelanggan pada data demo" value={customers.length} tone="sand" /></div><div className="chart-grid"><Panel title="Tren booking bulanan" description="Jumlah booking dihitung dari dataset demo."><div className="admin-chart"><ResponsiveContainer width="100%" height="100%"><BarChart data={monthlyPerformance}><CartesianGrid vertical={false} stroke="#eee5d9" /><XAxis dataKey="name" axisLine={false} tickLine={false} /><YAxis axisLine={false} tickLine={false} /><Tooltip /><Bar dataKey="bookings" fill="#9B7A48" radius={[6, 6, 0, 0]} /></BarChart></ResponsiveContainer></div></Panel><Panel title="Layanan populer" description="Jumlah booking terhubung per layanan."><div className="admin-chart"><ResponsiveContainer width="100%" height="100%"><BarChart data={categories} layout="vertical" margin={{ left: 8 }}><CartesianGrid horizontal={false} stroke="#eee5d9" /><XAxis type="number" axisLine={false} tickLine={false} /><YAxis type="category" dataKey="name" width={120} axisLine={false} tickLine={false} /><Tooltip /><Bar dataKey="bookings" fill="#321B16" radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div></Panel></div></div>;
+  const [allBookings] = useLocalStorage(storageKeys.bookings, initialBookings);
+  const [allUsers] = useLocalStorage(storageKeys.users, users);
+  const [allPets] = useLocalStorage(storageKeys.pets, initialPets);
+  const [allServices] = useLocalStorage(storageKeys.services, initialServices);
+  const [allTransactions] = useLocalStorage(storageKeys.transactions, initialTransactions);
+  const bookingRecords = getBookingRecords(allBookings, allPets, allUsers, allServices);
+  const monthlyPerformance = getMonthlyPerformance(allBookings, allTransactions);
+  const categories = getServicePerformance(allBookings, allServices);
+  const paidRevenue = allTransactions.filter((transaction) => transaction.status === 'Lunas')
+    .reduce((sum, transaction) => sum + Number(transaction.totalAmount || 0), 0);
+  const customerCount = allUsers.filter((customer) => customer.role === 'user' || customer.role === 'customer').length;
+  return <div className="page-shell"><PageHeading eyebrow="ANALITIK" title="Laporan" description="Ringkasan performa dari booking, pelanggan, layanan, dan transaksi tersimpan." action={<button className="button-secondary" type="button" onClick={() => downloadReportCsv(bookingRecords)}><FiDownload /> Ekspor CSV</button>} /><DemoNotice /><div className="summary-row"><StatTile icon={<FiCalendar />} label="Booking tersimpan" value={bookingRecords.length} /><StatTile icon={<FiTrendingUp />} label="Nilai transaksi lunas" value={formatCurrency(paidRevenue)} tone="sage" /><StatTile icon={<FiUsers />} label="Pelanggan tersimpan" value={customerCount} tone="sand" /></div><div className="chart-grid"><Panel title="Tren booking bulanan" description="Jumlah booking per bulan dari data tersimpan."><div className="admin-chart"><ResponsiveContainer width="100%" height="100%"><BarChart data={monthlyPerformance}><CartesianGrid vertical={false} stroke="#eee5d9" /><XAxis dataKey="name" axisLine={false} tickLine={false} /><YAxis axisLine={false} tickLine={false} /><Tooltip /><Bar dataKey="bookings" fill="#9B7A48" radius={[6, 6, 0, 0]} /></BarChart></ResponsiveContainer></div></Panel><Panel title="Layanan populer" description="Jumlah booking dihitung dari layanan yang tersimpan."><div className="admin-chart"><ResponsiveContainer width="100%" height="100%"><BarChart data={categories} layout="vertical" margin={{ left: 8 }}><CartesianGrid horizontal={false} stroke="#eee5d9" /><XAxis type="number" axisLine={false} tickLine={false} /><YAxis type="category" dataKey="name" width={120} axisLine={false} tickLine={false} /><Tooltip /><Bar dataKey="bookings" fill="#321B16" radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div></Panel></div></div>;
 }
 
 export function StaffPage() {
@@ -387,7 +424,7 @@ export function StaffPage() {
     setFormError('');
     setShowForm(false);
   };
-  return <div className="page-shell"><PageHeading eyebrow="TIM BISNIS" title="Staf & akses" description="Tambah, nonaktifkan, dan hapus akun staf demo." action={<button className="button-primary" type="button" onClick={() => { setShowForm((open) => !open); setFormError(''); }}><FiPlus /> Tambah staf</button>} />{showForm && <Panel title="Buat akun staf"><form className="settings-form" onSubmit={addStaff}><label>Nama lengkap<input name="name" required /></label><label>Nomor HP<input name="phone" type="tel" autoComplete="tel" required /></label><label>Password<input name="password" type="password" minLength="8" required autoComplete="new-password" /></label><label>Jabatan<input name="role" required placeholder="Contoh: Groomer" /></label><label>Layanan<input name="services" required placeholder="Contoh: Grooming" /></label>{formError && <p className="form-error">{formError}</p>}<button className="button-primary" type="submit">Simpan akun staf</button><p className="form-note">Password hanya divalidasi saat pembuatan dan tidak disimpan di browser demo.</p></form></Panel>}<Panel title="Daftar staf"><DataTable columns={columns} data={staffRowsWithPhone} /></Panel><div className="summary-row"><StatTile icon={<FiShield />} label="Akun staf" value={staffRowsWithPhone.length} /><StatTile icon={<FiActivity />} label="Akun aktif" value={staffRowsWithPhone.filter((item) => item.status === 'Aktif').length} tone="sage" /></div></div>;
+  return <div className="page-shell"><PageHeading eyebrow="TIM BISNIS" title="Staf & akses" description="Tambah, nonaktifkan, dan hapus akun staf demo." action={<button className="button-primary" type="button" onClick={() => { setShowForm((open) => !open); setFormError(''); }}><FiPlus /> Tambah staf</button>} />{showForm && <Panel title="Buat akun staf"><form className="settings-form" onSubmit={addStaff}><label>Nama lengkap<input name="name" required /></label><label>Nomor HP<input name="phone" type="tel" autoComplete="tel" required /></label><label>Password<input name="password" type="password" minLength="8" required autoComplete="new-password" /></label><label>Jabatan<input name="role" required placeholder="Contoh: Groomer" /></label><label>Layanan<input name="services" required placeholder="Contoh: Grooming" /></label>{formError && <p className="form-error">{formError}</p>}<button className="button-primary" type="submit">Simpan akun staf</button><p className="form-note">Password hanya divalidasi saat pembuatan dan tidak disimpan di browser demo.</p></form></Panel>}<Panel title="Daftar staf"><DataTable columns={columns} data={staffRowsWithPhone} /></Panel></div>;
 }
 
 export function SettingsPage() {
@@ -410,7 +447,7 @@ export function SegmentsPage() {
   const liveSegments = getCustomerSegments(allUsers, allBookings);
   const segment = liveSegments.find((item) => item.id === selected) || liveSegments[0];
   const people = allUsers.filter((customer) => segment?.customerIds.includes(customer.id));
-  return <div className="page-shell"><PageHeading eyebrow="CRM & RETENSI" title="Segmen pelanggan" description="Kelompok pelanggan dihitung ulang dari akun dan booking tersimpan." /><div className="segment-layout"><Panel title="Daftar segmen"><div className="simple-list">{liveSegments.map((item) => <button className={`segment-choice ${selected === item.id ? 'selected' : ''}`} key={item.id} onClick={() => setSelected(item.id)}><span><strong>{item.name}</strong><small>{item.description}</small></span><span className="row-end">{item.customerIds.length}</span></button>)}</div></Panel><Panel title={segment?.name || 'Pilih segmen'} description={segment?.description}><div className="simple-list">{people.map((person) => <Link className="simple-list-row" key={person.id} to={`/admin/customers/${person.id}`}><Avatar name={person.name} /><span><strong>{person.name}</strong><small>{person.email}</small></span><span className="row-end">Profil</span></Link>)}</div>{people.length === 0 && <p className="muted-copy">Belum ada profil pada segmen ini.</p>}</Panel></div></div>;
+  return <div className="page-shell"><PageHeading eyebrow="CRM & RETENSI" title="Segmen pelanggan" description="Kelompok pelanggan dihitung ulang dari akun dan booking tersimpan." /><div className="segment-layout"><Panel title="Daftar segmen"><div className="simple-list">{liveSegments.map((item) => <button type="button" aria-pressed={segment?.id === item.id} className={`segment-choice ${segment?.id === item.id ? 'selected' : ''}`} key={item.id} onClick={() => setSelected(item.id)}><span><strong>{item.name}</strong><small>{item.description}</small></span><span className="row-end">{item.customerIds.length}</span></button>)}</div></Panel><Panel title={segment?.name || 'Pilih segmen'} description={segment?.description}><div className="simple-list">{people.map((person) => <Link className="simple-list-row" key={person.id} to={`/admin/customers/${person.id}`}><Avatar name={person.name} /><span><strong>{person.name}</strong><small>{person.email}</small></span><span className="row-end">Profil</span></Link>)}</div>{people.length === 0 && <p className="muted-copy">Belum ada profil pada segmen ini.</p>}</Panel></div></div>;
 }
 
 export function FollowUpsPage() {

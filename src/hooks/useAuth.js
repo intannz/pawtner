@@ -2,15 +2,25 @@ import { useEffect } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { users } from '../data/users';
 import { bookings as initialBookings, dinaDemoBookings } from '../data/bookings';
-import { storageKeys } from '../data/appData';
+import { pets as initialPets } from '../data/pets';
+import { transactions as initialTransactions } from '../data/transactions';
+import { initialServices, storageKeys } from '../data/appData';
 
 const demoCustomerIds = new Set(users.filter((item) => item.role === 'user').map((item) => item.id));
+
+function mergeMissingRecords(records, seedRecords) {
+  const existingIds = new Set(records.map((record) => record.id));
+  return [...records, ...seedRecords.filter((record) => !existingIds.has(record.id))];
+}
 
 export const useAuth = () => {
   // Menyimpan data user yang sedang login di localStorage dengan key 'pawtner_session'
   const [user, setUser] = useLocalStorage('pawtner_session', null);
   const [storedUsers, setStoredUsers] = useLocalStorage(storageKeys.users, users);
   const [storedBookings, setStoredBookings] = useLocalStorage(storageKeys.bookings, initialBookings);
+  const [, setStoredPets] = useLocalStorage(storageKeys.pets, initialPets);
+  const [, setStoredTransactions] = useLocalStorage(storageKeys.transactions, initialTransactions);
+  const [, setStoredServices] = useLocalStorage(storageKeys.services, initialServices);
   const [seedVersion, setSeedVersion] = useLocalStorage('pawtner_seed_version', 0);
 
   useEffect(() => {
@@ -45,8 +55,21 @@ export const useAuth = () => {
         return { ...person, points: 0, pointLots: [] };
       }));
       setSeedVersion(2);
+      return;
     }
-  }, [seedVersion, setStoredBookings, setSeedVersion, setStoredUsers, storedBookings]);
+    if (seedVersion < 3) {
+      setStoredUsers((items) => mergeMissingRecords(items, users));
+      setStoredBookings((items) => mergeMissingRecords(items, initialBookings));
+      setStoredPets((items) => mergeMissingRecords(items, initialPets));
+      setStoredTransactions((items) => mergeMissingRecords(items, initialTransactions));
+      setStoredServices((items) => mergeMissingRecords(items, initialServices).map((service) => {
+        const seededService = initialServices.find((item) => item.id === service.id);
+        if (service.id !== 'SRV-001' || service.description?.includes('antijamur') || !seededService) return service;
+        return { ...service, description: seededService.description };
+      }));
+      setSeedVersion(3);
+    }
+  }, [seedVersion, setStoredBookings, setSeedVersion, setStoredPets, setStoredServices, setStoredTransactions, setStoredUsers, storedBookings]);
 
   const login = (email) => {
     // Karena ini MVP, kita simulasi login hanya dengan mengecek kecocokan email di dummy data
