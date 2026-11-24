@@ -1,6 +1,6 @@
-import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
+import { FooterBottom } from '../components/public/Footer';
 
 const AuthLayout = () => {
   return (
@@ -23,6 +23,7 @@ const AuthLayout = () => {
           <Outlet />
         </div>
       </div>
+      <FooterBottom />
     </div>
   );
 };

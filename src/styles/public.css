@@ -1176,16 +1176,27 @@
 
 .auth-layout {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  padding: 28px 16px;
+  padding: 28px 0 0;
   background: #f6f1e9;
 }
 
 .auth-container {
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 450px;
+  margin: auto;
+}
+
+.auth-layout .footer-bottom-only {
+  width: 100%;
+  margin-top: 32px;
+}
+
+.auth-layout .footer-bottom-only .container {
+  padding-right: 0;
+  padding-left: 0;
 }
 
 .auth-logo-wrapper {
